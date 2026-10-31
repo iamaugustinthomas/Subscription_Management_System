@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subscription Management Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#f4f7fc;
+}
+
+.container{
+    display:flex;
+    min-height:100vh;
+}
+
+/* Sidebar */
+
+.sidebar{
+    width:260px;
+    background:#6C63FF;
+    color:white;
+    padding:20px;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:700;
+    margin-bottom:40px;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar ul li{
+    padding:15px;
+    margin:8px 0;
+    cursor:pointer;
+    border-radius:10px;
+    transition:.3s;
+}
+
+.sidebar ul li:hover{
+    background:rgba(255,255,255,0.15);
+}
+
+/* Main Content */
+
+.main{
+    flex:1;
+    padding:30px;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.header h1{
+    color:#333;
+}
+
+.profile{
+    background:white;
+    padding:10px 20px;
+    border-radius:30px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+/* Cards */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+    margin-bottom:30px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.card h3{
+    color:#666;
+    font-size:16px;
+}
+
+.card p{
+    margin-top:10px;
+    font-size:32px;
+    font-weight:600;
+    color:#6C63FF;
+}
+
+/* Tables */
+
+.table-container{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+table th{
+    background:#6C63FF;
+    color:white;
+    padding:12px;
+}
+
+table td{
+    padding:12px;
+    border-bottom:1px solid #eee;
+}
+
+.status-active{
+    background:#d1fae5;
+    color:#059669;
+    padding:6px 12px;
+    border-radius:20px;
+}
+
+.btn{
+    background:#6C63FF;
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.btn:hover{
+    background:#4F46E5;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            BrightLoop
+        </div>
+
+        <ul>
+            <li>📊 Dashboard</li>
+            <li>📦 Products</li>
+            <li>📋 Plans</li>
+            <li>🔄 Subscriptions</li>
+            <li>🧾 Invoices</li>
+            <li>💰 Payments</li>
+            <li>🏷 Discounts</li>
+            <li>👥 Customers</li>
+            <li>⚙ Settings</li>
+        </ul>
+
+    </div>
+
+    <!-- Main -->
+
+    <div class="main">
+
+        <div class="header">
+            <h1>Finance Dashboard</h1>
+            <div class="profile">
+                Admin
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>Active Subscriptions</h3>
+                <p id="activeSubs">0</p>
+            </div>
+
+            <div class="card">
+                <h3>Total Revenue</h3>
+                <p id="revenue">₹0</p>
+            </div>
+
+            <div class="card">
+                <h3>Collected Payments</h3>
+                <p id="payments">₹0</p>
+            </div>
+
+            <div class="card">
+                <h3>Overdue Invoices</h3>
+                <p id="overdue">0</p>
+            </div>
+
+        </div>
+
+        <!-- Invoice Table -->
+
+        <div class="table-container">
+
+            <h2 style="margin-bottom:20px;">
+                Recent Invoices
+            </h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Invoice No</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>INV001</td>
+                        <td>John</td>
+                        <td>₹2500</td>
+                        <td>
+                            <span class="status-active">
+                                Paid
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>INV002</td>
+                        <td>Alex</td>
+                        <td>₹3500</td>
+                        <td>
+                            <span class="status-active">
+                                Paid
+                            </span>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+            <br>
+
+            <button class="btn" onclick="generateInvoices()">
+                Generate Monthly Invoices
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* Fetch Dashboard Data */
+
+async function loadDashboard(){
+
+    try{
+
+        const response = await fetch(
+            "http://127.0.0.1:5000/api/finance/dashboard"
+        );
+
+        const data = await response.json();
+
+        document.getElementById("activeSubs").innerText =
+            data.active_subscriptions;
+
+        document.getElementById("revenue").innerText =
+            "₹" + data.total_revenue;
+
+        document.getElementById("payments").innerText =
+            "₹" + data.collected_payments;
+
+        document.getElementById("overdue").innerText =
+            data.overdue_invoices;
+
+    }
+    catch(error){
+        console.error(error);
+    }
+}
+
+/* Generate Invoice */
+
+async function generateInvoices(){
+
+    try{
+
+        const response = await fetch(
+            "http://127.0.0.1:5000/api/billing/generate",
+            {
+                method:"POST"
+            }
+        );
+
+        const data = await response.json();
+
+        alert(data.message);
+
+    }
+    catch(error){
+        console.error(error);
+    }
+
+}
+
+loadDashboard();
+
+</script>
+
+</body>
+</html>
