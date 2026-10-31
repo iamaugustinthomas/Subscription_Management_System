@@ -196,27 +196,25 @@ table td{
 
         <!-- Stats Cards -->
 
-        <div class="cards">
-
-            <div class="card">
-                <h3>Active Subscriptions</h3>
-                <p id="activeSubs">0</p>
-            </div>
-
-            <div class="card">
-                <h3>Total Revenue</h3>
-                <p id="revenue">₹0</p>
-            </div>
-
-            <div class="card">
-                <h3>Collected Payments</h3>
-                <p id="payments">₹0</p>
-            </div>
-
-            <div class="card">
-                <h3>Overdue Invoices</h3>
-                <p id="overdue">0</p>
-            </div>
+        <div class="card">
+            <h3>Active Subscriptions</h3>
+            <p id="activeSubs">0</p>
+        </div>
+        
+        <div class="card">
+            <h3>Total Revenue</h3>
+            <p id="revenue">₹0</p>
+        </div>
+        
+        <div class="card">
+            <h3>Outstanding</h3>
+            <p id="outstanding">₹0</p>
+        </div>
+        
+        <div class="card">
+            <h3>Overdue Invoices</h3>
+            <p id="overdue">0</p>
+        </div>
 
         </div>
 
@@ -239,30 +237,10 @@ table td{
                     </tr>
                 </thead>
 
-                <tbody>
-
+                <tbody id="invoiceTableBody">
                     <tr>
-                        <td>INV001</td>
-                        <td>John</td>
-                        <td>₹2500</td>
-                        <td>
-                            <span class="status-active">
-                                Paid
-                            </span>
-                        </td>
+                        <td colspan="4">Loading...</td>
                     </tr>
-
-                    <tr>
-                        <td>INV002</td>
-                        <td>Alex</td>
-                        <td>₹3500</td>
-                        <td>
-                            <span class="status-active">
-                                Paid
-                            </span>
-                        </td>
-                    </tr>
-
                 </tbody>
 
             </table>
@@ -302,7 +280,7 @@ async function loadDashboard() {
             "₹" + Number(summary.total_outstanding).toFixed(2);
 
         document.getElementById("overdue").innerText =
-            "₹" + Number(summary.total_overdue).toFixed(2);
+            summary.total_overdue;
 
         const tableBody =
             document.getElementById("invoiceTableBody");
