@@ -281,11 +281,8 @@ table td{
 
 <script>
 
-/* Fetch Dashboard Data */
-
-async function loadDashboard(){
-
-    try{
+async function loadDashboard() {
+    try {
 
         const response = await fetch(
             "http://127.0.0.1:5000/api/finance/dashboard"
@@ -293,46 +290,76 @@ async function loadDashboard(){
 
         const data = await response.json();
 
+        const summary = data.summary;
+
         document.getElementById("activeSubs").innerText =
-            data.active_subscriptions;
+            summary.active_subscriptions;
 
         document.getElementById("revenue").innerText =
-            "₹" + data.total_revenue;
+            "₹" + Number(summary.total_revenue).toFixed(2);
 
-        document.getElementById("payments").innerText =
-            "₹" + data.collected_payments;
+        document.getElementById("outstanding").innerText =
+            "₹" + Number(summary.total_outstanding).toFixed(2);
 
         document.getElementById("overdue").innerText =
-            data.overdue_invoices;
+            "₹" + Number(summary.total_overdue).toFixed(2);
 
-    }
-    catch(error){
+        const tableBody =
+            document.getElementById("invoiceTableBody");
+
+        tableBody.innerHTML = "";
+
+        data.overdue_invoices.forEach(invoice => {
+
+            tableBody.innerHTML += `
+                <tr>
+                    <td>${invoice.invoice_number}</td>
+                    <td>${invoice.company_name}</td>
+                    <td>₹${invoice.total}</td>
+                    <td>${invoice.due_date}</td>
+                </tr>
+            `;
+        });
+
+        if (data.overdue_invoices.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="4"
+                        style="text-align:center;">
+                        No overdue invoices
+                    </td>
+                </tr>
+            `;
+        }
+
+    } catch (error) {
         console.error(error);
     }
 }
 
-/* Generate Invoice */
+async function generateInvoices() {
 
-async function generateInvoices(){
-
-    try{
+    try {
 
         const response = await fetch(
-            "http://127.0.0.1:5000/api/billing/generate",
+            "http://127.0.0.1:5000/api/billing/run-cycle",
             {
-                method:"POST"
+                method: "POST"
             }
         );
 
         const data = await response.json();
 
-        alert(data.message);
+        alert(
+            "Invoices Generated : " +
+            data.invoices_generated
+        );
 
-    }
-    catch(error){
+        loadDashboard();
+
+    } catch (error) {
         console.error(error);
     }
-
 }
 
 loadDashboard();
